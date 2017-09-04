@@ -18,7 +18,6 @@ class HomeView extends Component{
     render(){
         let { currentUser } = this.props
         return (<div>
-            WELCOME
         </div>)
     }
 }

@@ -18,7 +18,7 @@ import ScheduleView from '../views/ScheduleView'
 
 export default (
     <Route path="/" component={CalculatorLayout}>
-        <IndexRoute component={HomeView} />
+        <IndexRoute component={ScheduleView} />
         <Route path="/about" component={AboutView} />
         <Route path="/top-skor" component={TopScoreView} />
         <Route path="/grup/:id" component={GroupRankView} />

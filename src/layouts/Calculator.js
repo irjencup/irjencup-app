@@ -21,11 +21,6 @@ export default function CalculatorLayout({children}){
                   <a href="#/grup/2">Grup B</a>
                 </li>
                 <li>
-                  <a style={{fontWeight: 'bold'}} href="#">
-                    IJCUP2017
-                  </a>
-                </li>
-                <li>
                   <a href="#/jadwal">
                     {" "}
                     Jadwal <span className="sr-only" />
@@ -38,16 +33,21 @@ export default function CalculatorLayout({children}){
                     Top Skor <span className="sr-only" />
                   </a>
                 </li>
+                <li className="dropdown">
+                  <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    Tahun <span className="caret" />
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <a href="../2016">2016</a>
+                    </li>
+                    <li>
+                      <a href="../2017">2017</a>
+                    </li>
+                  </ul>
+                </li>
               </ul>
-              <ul className="nav navbar-nav navbar-right">
-              <li className="dropdown">
-                <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tahun <span className="caret"></span></a>
-                <ul className="dropdown-menu">
-                  <li><a href="/2016">2016</a></li>
-                  <li><a href="/2017">2017</a></li>
-                </ul>
-              </li>
-              </ul>
+              <ul className="nav navbar-nav navbar-right" />
             </div>
           </div>
         </nav>
