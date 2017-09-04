@@ -10,6 +10,7 @@ export default class PageWrapperFront extends React.Component {
     let { children, title, rightButton } = this.props
     return (<div className="">
       <div className="container page-wrapper animated zoomIn">
+        <div className="col-md-12">
         <h3>{title}
           <div style={{float: 'right'}}>
             {rightButton.map((button, index)=>{
@@ -19,7 +20,9 @@ export default class PageWrapperFront extends React.Component {
             })}
           </div>
         </h3>
-        <hr/>
+        </div>
+        <br/>
+        <br/>
         {children}
       </div>
     </div>);

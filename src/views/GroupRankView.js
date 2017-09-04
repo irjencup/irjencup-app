@@ -1,5 +1,10 @@
 import React, {PropTypes} from 'react';
 import PageWrapperFront from './layouts/PageWrapperFront'
+import RankIcon from "react-icons/lib/md/view-list";
+import FrownIcon from "react-icons/lib/fa/frown-o";
+import SmileIcon from "react-icons/lib/fa/smile-o";
+import PlayIcon from "react-icons/lib/fa/play-circle";
+import MehIcon from "react-icons/lib/fa/meh-o";
 
 export default class GroupRankView extends React.Component {
   constructor(props){
@@ -129,22 +134,22 @@ export default class GroupRankView extends React.Component {
       return <div className="container"><Loading></Loading></div>
     }
     return (<div>
-      <PageWrapperFront title="Group Rank">
+      <PageWrapperFront title={<div><RankIcon/> klasemen</div>}>
         <div className="col-md-12">
           <table className="table table-bordered">
             <thead>
-              <tr style={{background: 'purple', color: '#fff'}}>
-                <th style={{width: '30px', textAlign: 'right'}}>peringkat</th>
+              <tr style={{background: "rgba(0,0,0,0.5)", color: '#fff'}}>
+                <th style={{width: '30px', textAlign: 'right'}}>rank</th>
                 <th style={{minWidth: '350px'}}>team</th>
                 <th style={{textAlign: 'center', background: 'green', color: '#fff'}}>poin</th>
                 <th style={{textAlign: 'center', background: '#2780E3'}}>selisih</th>
                 <th style={{background: 'orange'}}>gol</th>
                 <th>bobol</th>
                 <th></th>
-                <th style={{textAlign: 'center'}}>main</th>
-                <th style={{textAlign: 'center'}}>menang</th>
-                <th style={{textAlign: 'center'}}>draw</th>
-                <th style={{textAlign: 'center'}}>kalah</th>
+                <th style={{textAlign: 'center'}}><PlayIcon/></th>
+                <th style={{textAlign: 'center', color: "#2880E3", fontWeight: 'bold'}}><SmileIcon/></th>
+                <th style={{textAlign: 'center'}}><MehIcon/></th>
+                <th style={{textAlign: 'center', color: "red"}}><FrownIcon/></th>
               </tr>
             </thead>
             <tbody>
@@ -156,7 +161,7 @@ export default class GroupRankView extends React.Component {
                     <td style={{textAlign: 'center'}}>{parseInt(team.goal) - parseInt(team.goaled)}</td>
                     <td style={{textAlign: 'center'}}>{team.goal}</td>
                     <td style={{textAlign: 'center'}}>{team.goaled}</td>
-                    <td style={{background: 'purple'}}></td>
+                    <td style={{background: 'rgba(0,0,0,0.5)'}}></td>
                     <td style={{textAlign: 'center'}}>{team.play}</td>
                     <td style={{textAlign: 'center'}}>{team.win}</td>
                     <td style={{textAlign: 'center'}}>{team.draw}</td>

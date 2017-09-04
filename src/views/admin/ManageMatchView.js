@@ -1,6 +1,10 @@
 import React, {PropTypes} from 'react';
 import PageWrapper from '../layouts/PageWrapper'
 import EditScore from '../../components/EditScore.react'
+import localStorage from 'localStorage'
+import config from '../../app.config'
+let PASSWORD = config.PASSWORD
+let PASSWORD_KEY = config.PASSWORD_KEY;
 
 export default class ManageMatchView extends React.Component {
   constructor(props) {
@@ -14,10 +18,25 @@ export default class ManageMatchView extends React.Component {
       finalmatch:[],
       loading: true,
       editedMatch: {},
+      password: localStorage.getItem(PASSWORD_KEY)
     }
   }
 
   componentDidMount() {
+        if (localStorage.getItem(PASSWORD_KEY) != PASSWORD) {
+          Swal(
+            {
+              type: "input",
+              text: "Masukan administrator password",
+              title: "Tunggu dulu!",
+              inputType: "password"
+            },
+            password => {
+              this.setState({ password: password });
+              localStorage.setItem(PASSWORD_KEY, password);
+            }
+          );
+        }
     this.getMatches()
   }
 
@@ -111,7 +130,6 @@ export default class ManageMatchView extends React.Component {
     }, ()=>{
       // delete match
       // TODO
-      console.log(match, 'MATCH');
       if(match.scorer1 || match.scorer2){
         Swal({
           title: 'Hapus dulu semua gol!',
@@ -140,6 +158,9 @@ export default class ManageMatchView extends React.Component {
   }
 
   render() {
+    if(this.state.password != PASSWORD){
+      return <div>Tidak diizinkan</div>
+    }
     if(this.state.loading){
       return <div className="container"><Loading/></div>
     }

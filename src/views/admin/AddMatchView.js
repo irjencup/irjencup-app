@@ -5,6 +5,10 @@ import 'react-datepicker/dist/react-datepicker.min.css'
 import moment from 'moment-timezone'
 moment.locale('id')
 import { hashHistory } from 'react-router'
+import localStorage from 'localStorage'
+import config from '../../app.config'
+let PASSWORD = config.PASSWORD
+let PASSWORD_KEY = config.PASSWORD_KEY
 
 export default class AddMatchView extends React.Component {
   constructor(props) {
@@ -22,13 +26,27 @@ export default class AddMatchView extends React.Component {
         type: 'group',
         scorer1: null,
         scorer2: null,
-        status: 0 // 0 belum dimulai, 1 berlangsung, 2 selesai,
-
+        status: 0 ,// 0 belum dimulai, 1 berlangsung, 2 selesai,
+        password: localStorage.getItem(PASSWORD_KEY)
       }
     }
   }
 
   componentDidMount() {
+        if (localStorage.getItem(PASSWORD_KEY) != PASSWORD) {
+          Swal(
+            {
+              type: "input",
+              text: "Masukan administrator password",
+              title: "Tunggu dulu!",
+              inputType: "password"
+            },
+            password => {
+              this.setState({ password: password });
+              localStorage.setItem(PASSWORD_KEY, password);
+            }
+          );
+        }
     this.getTeams()
   }
 
@@ -93,6 +111,9 @@ export default class AddMatchView extends React.Component {
   }
 
   render() {
+    if(this.state.password != PASSWORD){
+      return <div>Tidak diizinkan</div>
+    }
     return (<div>
       <PageWrapper title="Tambah Pertandingan"
         rightButton={[{label: 'Kembali', route: '/kelola/pertandingan'}]}

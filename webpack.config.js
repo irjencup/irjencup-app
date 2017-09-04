@@ -1,15 +1,15 @@
 module.exports = {
 
     entry: [
-        // 'webpack-dev-server/client?http://localhost:8000',
-        // 'webpack/hot/only-dev-server',
+        'webpack-dev-server/client?http://localhost:2017',
+        'webpack/hot/only-dev-server',
         './src/main.js'
     ],
 
     output: {
         filename: 'bundle.js',
         path: __dirname + '/dist',
-        publicPath: 'http://localhost:8000/static'
+        publicPath: 'http://localhost:2017/static'
     },
 
     module: {

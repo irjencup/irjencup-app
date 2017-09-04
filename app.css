@@ -1,22 +1,30 @@
 body{
-  background: black url('assets/bg.jpg');
+  /* background: black url('assets/bg.jpg'); */
   background-repeat: no-repeat;
   height: 100%;
-  background-attachment: fixed;
-  background-size:cover;
+  /* background-attachment: fixed; */
+  /* background-size:cover; */
+  background: #FF5F6D;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #FFC371, #FF5F6D);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #FFC371, #FF5F6D); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 h1,h2,h3,h4,h5,h6{
-  color: #000
+  color: #fff
 }
 .page-wrapper{
-  background: rgba(255, 255, 255, 0.9);
+  /* background: rgba(255, 255, 255, 0.9); */
   margin-top: -22px;
   min-height: 90%;
 }
 
+.page-wrapper h3{
+  font-weight: bold;
+}
+
 .navbar{
-  border-bottom: 0.5px solid #fff;
-  background: rgba(0,0,0,0.7) !important
+  /* border-bottom: 0.5px solid #fff; */
+  border: 0px !important;
+  background: rgba(0,0,0,0.5) !important
 }
 
 .table.table-bordered.table-striped{
@@ -28,20 +36,34 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .table > thead > tr {
-  background: purple;
+  background: rgba(0,0,0,0.5);
   color: white;
 }
 
 .table-bordered>thead>tr>th, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>tbody>tr>td, .table-bordered>tfoot>tr>td {
-    border: 1px solid #000;
+    border: 1px solid #fff;
 }
 
 ul.list-group li.list-group-item{
   background: transparent;
   font-weight: bold;
-  border: 1px solid #000;
+  border: 1px solid #fff;
 }
 
 hr{
-  border-color: #000 !important;
+  border-color: #fff !important;
+}
+
+
+.navbar.center .navbar-inner {
+    text-align: center;
+}
+
+.navbar.center .navbar-inner .nav {
+    display:inline-block;
+    float: none;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: rgba(255,255,255,0.5) !important;
 }

@@ -1,6 +1,10 @@
 import React, { PropTypes } from 'react'
 import AboutView  from '../views/AboutView.js'
 import {hashHistory} from 'react-router'
+import localStorage from "localStorage";
+import config from "../app.config";
+const PASSWORD = config.PASSWORD;
+const PASSWORD_KEY = config.PASSWORD_KEY;
 
 
 export default class AddTeams extends React.Component {
@@ -13,8 +17,27 @@ export default class AddTeams extends React.Component {
         group: ''
       },
       submitting: false,
+      password: localStorage.getItem(PASSWORD_KEY)
     }
   }
+
+  componentDidMount() {
+        if (localStorage.getItem(PASSWORD_KEY) != PASSWORD) {
+          Swal(
+            {
+              type: "input",
+              text: "Masukan administrator password",
+              title: "Tunggu dulu!",
+              inputType: "password"
+            },
+            password => {
+              this.setState({ password: password });
+              localStorage.setItem(PASSWORD_KEY, password);
+            }
+          );
+        }
+  }
+  
 
   _submit(e){
     e.preventDefault();
@@ -34,7 +57,7 @@ export default class AddTeams extends React.Component {
       return false;
     }
 
-    database.ref('/2016/teams/').push(model).then((snapshot)=>{
+    database.ref(firepath+'/teams/').push(model).then((snapshot)=>{
       console.log('BERHASIL MENAMBAH', snapshot);
       hashHistory.push('/kelola/tim')
       this.setState({submitting: false})
@@ -43,6 +66,9 @@ export default class AddTeams extends React.Component {
   }
 
   render() {
+    if(this.state.password != PASSWORD){
+      return <div>Tidak diizinkan</div>
+    }
     return (<div>
           <div className="row">
               <div className="col-xs-4 col-md-push-4">

@@ -3,6 +3,12 @@ import PageWrapper from '../layouts/PageWrapper'
 import Loading from '../../components/Loading.react'
 import FileInput from 'react-file-input'
 import { findDOMNode } from 'react-dom'
+import localStorage from 'localStorage'
+import config from "../../app.config";
+const PASSWORD = config.PASSWORD;
+const PASSWORD_KEY = config.PASSWORD_KEY;
+const firepath = config.firepath
+
 
 let initialModel = {
   name: '',
@@ -17,10 +23,27 @@ export default class AddTeamPlayerView extends React.Component {
     this.state = {
       team: null,
       pemainList: [],
+      password: localStorage.getItem(PASSWORD_KEY)
     }
   }
 
   componentDidMount() {
+        
+    if (localStorage.getItem(PASSWORD_KEY) != PASSWORD) {
+      Swal(
+        {
+          type: "input",
+          text: "Masukan administrator password",
+          title: "Tunggu dulu!",
+          inputType: "password"
+        },
+        password => {
+          this.setState({ password: password });
+          localStorage.setItem(PASSWORD_KEY, password);
+        }
+      );
+    }
+    this.setState({ password: localStorage.getItem(PASSWORD_KEY) });
     this.getTeamData()
   }
 
@@ -56,12 +79,12 @@ export default class AddTeamPlayerView extends React.Component {
         model.team = this.props.params.key;
 
     // first create players key
-    let newPlayerKey = database.ref('/2016/players/').push(model).key;
+    let newPlayerKey = database.ref(firepath + '/players/').push(model).key;
 
     // then update players key with data and as well team players
     let updates = {}
-        updates['/2016/players/' + newPlayerKey ] = model;
-        updates['/2016/teams/' + this.props.params.key + '/players/' + newPlayerKey] = true;
+        updates[firepath + '/players/' + newPlayerKey ] = model;
+        updates[firepath + '/teams/' + this.props.params.key + '/players/' + newPlayerKey] = true;
 
     // commit the update
     database.ref().update(updates).then(()=>{
@@ -78,7 +101,32 @@ export default class AddTeamPlayerView extends React.Component {
       type: 'warning',
       showCancelButton: true
     }, ()=>{
-      database.ref('/2016/players/'+player.key).remove().then(()=>{
+      database.ref(firepath + '/players/'+player.key).remove().then(()=>{
+        this.getTeamData();
+      })
+    })
+  }
+    _deletePlayer(player){
+    Swal({
+      title: 'Anda Yakin hapus?',
+      text: player.name,
+      type: 'warning',
+      showCancelButton: true
+    }, ()=>{
+      database.ref(firepath + '/players/'+player.key).remove().then(()=>{
+        this.getTeamData();
+      })
+    })
+  }
+
+  _clearGoal(player){
+    Swal({
+      title: 'Anda Yakin mereset gol pemain ini?',
+      text: player.name,
+      type: 'warning',
+      showCancelButton: true
+    }, ()=>{
+      database.ref(firepath + '/players/'+player.key).update({'/goal': 0}).then(()=>{
         this.getTeamData();
       })
     })
@@ -100,7 +148,7 @@ export default class AddTeamPlayerView extends React.Component {
         return false;
       }
       let updates = {}
-          updates['/2016/players/'+player.key + '/name'] = input
+          updates[firepath + '/players/'+player.key + '/name'] = input
 
       database.ref().update(updates).then(()=>{
         this.getTeamData();
@@ -110,7 +158,7 @@ export default class AddTeamPlayerView extends React.Component {
   }
 
   _uploadFile(e){
-    let uploadTask = storageBase.ref('2016/logo/'+this.state.team.nickname+'.jpg').put(e.target.files[0])
+    let uploadTask = storageBase.ref + (firepath + '/logo/'+this.state.team.nickname+'.jpg').put(e.target.files[0])
 
     uploadTask.on('state_changed', (snapshot)=>{
       // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
@@ -129,7 +177,7 @@ export default class AddTeamPlayerView extends React.Component {
     }, ()=>{
       // success
       let updates = {};
-          updates['/logo_url'] = uploadTask.snapshot.downloadURL;
+          updates[firepath + '/logo_url'] = uploadTask.snapshot.downloadURL;
       database.ref(firepath + '/teams/' + this.props.params.key).update(updates).then(()=>{
         this.getTeamData();
         findDOMNode(e.targe).value = ''
@@ -147,6 +195,9 @@ export default class AddTeamPlayerView extends React.Component {
   }
 
   render() {
+    if(this.state.password != PASSWORD){
+      return <div>Tidak diizinkan</div>
+    }
     let { team, pemainList } = this.state
     if(null == team ){
       return <div className="container"><Loading></Loading></div>
@@ -167,16 +218,24 @@ export default class AddTeamPlayerView extends React.Component {
           <h2>{team.officialname}</h2>
           <ul className="list-group">
             {pemainList.map((pemain, index)=>{
-              return <li key={index} className="list-group-item" style={{overflow: 'hidden'}}>
-                <button className="btn btn-info btn-xs" style={{marginRight:'5px'}}>
-                  {pemain.goal} gol
-                </button>
-                {pemain.name}
-                <div style={{float: 'right'}}>
-                  <button onClick={this._editPlayer.bind(this, pemain)} className="btn btn-success btn-xs">edit nama</button>
-                  <button onClick={this._deletePlayer.bind(this, pemain)} className="btn btn-danger btn-xs">x</button>
-                </div>
-              </li>
+              return <li key={index} className="list-group-item" style={{ overflow: "hidden" }}>
+                  <button className="btn btn-info btn-xs" style={{ marginRight: "5px" }}>
+                    {pemain.goal} gol
+                  </button>
+                  {pemain.name}
+                  <div style={{ float: "right" }}>
+                    <button onClick={this._editPlayer.bind(this, pemain)} className="btn btn-success btn-xs">
+                      edit nama
+                    </button>
+                    <button onClick={this._clearGoal.bind(this, pemain)} className="btn btn-warning btn-xs">
+                      clear gol
+                    </button>
+
+                    <button onClick={this._deletePlayer.bind(this, pemain)} className="btn btn-danger btn-xs">
+                      delete pemain
+                    </button>
+                  </div>
+                </li>;
             })}
             <li className="list-group-item" style={{overflow: 'hidden'}}>
               <form onSubmit={this._addPlayer.bind(this)}>

@@ -12,6 +12,7 @@ import _ from 'lodash'
 import config from './app.config'
 import Loading from './components/Loading.react'
 import Modal from 'react-modal'
+import localStorage from 'localStorage'
 
 let store = configureStore()
 let rootElement = document.getElementById('render')
@@ -42,4 +43,12 @@ window.firepath = config.firepath
 window.Loading = Loading
 window.Modal = Modal
 
+window.onbeforeunload = function(){
+  localStorage.removeItem('ij17password')
+}
+
+export default Root;
+
 render(<Root store={store} routes={routes} history={hashHistory}  />, rootElement)
+
+

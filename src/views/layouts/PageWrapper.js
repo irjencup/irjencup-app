@@ -10,7 +10,7 @@ export default class PageWrapper extends React.Component {
     let { children, title, rightButton } = this.props
     return (<div className="">
       <div className="container page-wrapper">
-        <h3>{title}
+        <h3 style={{fontWeight: 'bold'}}>{title}
           <div style={{float: 'right'}}>
             {rightButton.map((button, index)=>{
               return <Link key={index} to={button.route}><button className="btn btn-primary">
